@@ -30,21 +30,20 @@ if !exists('g:claude_aws_profile')
   let g:claude_aws_profile = ''
 endif
 
+if !exists("g:claude_implement_keybinding")
+  let g:claude_implement_keybinding = "<leader>ci"
+endif
+
+if !exists("g:claude_open_chat_keybinding")
+  let g:claude_open_chat_keybinding = "<leader>cc"
+endif
+
 if !exists("g:claude_send_chat_message_keybinding")
   let g:claude_send_chat_message_keybinding = "<C-]>"
 endif
 
-if !exists("g:claude_implement_keybinding")
-  let g:claude_implement_keybinding = "<Leader>ci"
-endif
-
-
-if !exists("g:claude_open_chat_keybinding")
-  let g:claude_open_chat_keybinding = "<Leader>cc"
-endif
-
 if !exists("g:claude_cancel_response_keybinding")
-  let g:claude_cancel_response_keybinding = "<Leader>cx"
+  let g:claude_cancel_response_keybinding = "<leader>cx"
 endif
 
 """""""""""""""""""""""""""""""""""""
@@ -597,7 +596,7 @@ endfunction
 
 " Command for code implementation
 command! -range -nargs=1 ClaudeImplement <line1>,<line2>call s:ClaudeImplement(<line1>, <line2>, <q-args>)
-vnoremap <Leader>ci :ClaudeImplement<Space>
+execute "vnoremap " . g:claude_implement_keybinding . " :ClaudeImplement<Space>"
 
 
 
@@ -730,8 +729,9 @@ function! s:OpenClaudeChat()
     augroup END
 
     " Add mappings for this buffer
-    inoremap <buffer> <C-]> <Esc>:call <SID>SendChatMessage('Claude:')<CR>
-    nnoremap <buffer> <C-]> :call <SID>SendChatMessage('Claude:')<CR>
+    command! -buffer -nargs=1 SendChatMessage call s:SendChatMessage(<q-args>)
+    execute "inoremap <buffer> " . g:claude_send_chat_message_keybinding . " <Esc>:call <SID>SendChatMessage('Claude:')<CR>"
+    execute "nnoremap <buffer> " . g:claude_send_chat_message_keybinding . " :call <SID>SendChatMessage('Claude:')<CR>"
   else
     let l:claude_winid = bufwinid(l:claude_bufnr)
     if l:claude_winid == -1
@@ -746,7 +746,7 @@ endfunction
 
 " Command to open Claude chat
 command! ClaudeChat call s:OpenClaudeChat()
-nnoremap <Leader>cc :ClaudeChat<CR>
+execute "nnoremap " . g:claude_open_chat_keybinding . " :ClaudeChat<CR>"
 
 
 " ----- Chat parser (to messages list)
@@ -1148,4 +1148,4 @@ function! s:CancelClaudeResponse()
 endfunction
 
 command! ClaudeCancel call s:CancelClaudeResponse()
-nnoremap <Leader>cx :ClaudeCancel<CR>
+execute "nnoremap " . g:claude_cancel_response_keybinding . " :ClaudeCancel<CR>"
