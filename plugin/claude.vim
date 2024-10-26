@@ -30,6 +30,23 @@ if !exists('g:claude_aws_profile')
   let g:claude_aws_profile = ''
 endif
 
+if !exists("g:claude_send_chat_message_keybinding")
+  let g:claude_send_chat_message_keybinding = "<C-]>"
+endif
+
+if !exists("g:claude_implement_keybinding")
+  let g:claude_implement_keybinding = "<Leader>ci"
+endif
+
+
+if !exists("g:claude_open_chat_keybinding")
+  let g:claude_open_chat_keybinding = "<Leader>cc"
+endif
+
+if !exists("g:claude_cancel_response_keybinding")
+  let g:claude_cancel_response_keybinding = "<Leader>cx"
+endif
+
 """""""""""""""""""""""""""""""""""""
 
 let s:plugin_dir = expand('<sfile>:p:h')
